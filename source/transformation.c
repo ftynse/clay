@@ -1488,7 +1488,7 @@ int clay_stripmine(osl_scop_p scop, clay_array_p beta,
             names->string[column+1], i);
     i++;
   } while (clay_util_scatnames_exists(scat, buffer));
-  new_var_iter = strdup(buffer);
+  CLAY_strdup(new_var_iter, buffer);
 
   // generate beta variable name
   i = 0;
@@ -1496,7 +1496,7 @@ int clay_stripmine(osl_scop_p scop, clay_array_p beta,
     sprintf(buffer, "__b%d", i);
     i++;
   } while (clay_util_scatnames_exists(scat, buffer));
-  new_var_beta = strdup(buffer);
+  CLAY_strdup(new_var_beta, buffer);
 
   // insert the two variables
   nb_strings = osl_strings_size(names) + 2;
@@ -2311,7 +2311,7 @@ int clay_add_array(osl_scop_p scop,
   id++;
   
   arrays->id[sz] = id;
-  arrays->names[sz] = strdup(name);
+  CLAY_strdup(arrays->names[sz], name);
 
   *result = id;
 
@@ -2454,6 +2454,8 @@ int clay_datacopy(osl_scop_p scop,
   arrays = osl_generic_lookup(scop->extension, OSL_URI_ARRAYS);
   scatnames = osl_generic_lookup(scop->extension, OSL_URI_SCATNAMES);
   params = osl_generic_lookup(scop->parameters, OSL_URI_STRINGS);
+  const char *tmp_body = "@ = @;";
+  char *tmp_body_copy;
 
   if (beta_insert->size == 0)
     return CLAY_ERROR_BETA_EMPTY;
@@ -2492,7 +2494,8 @@ int clay_datacopy(osl_scop_p scop,
   ebody->body = osl_body_malloc();
 
   // body string (it will be regenerated)
-  ebody->body->expression = osl_strings_encapsulate(strdup("@ = @;"));
+  CLAY_strdup(tmp_body_copy, tmp_body);
+  ebody->body->expression = osl_strings_encapsulate(tmp_body_copy);
 
   // copy iterators
   extbody = osl_generic_lookup(stmt_2->extension, OSL_URI_EXTBODY);

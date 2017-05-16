@@ -122,6 +122,7 @@ clay_data_p clay_data_clone(clay_data_p d) {
     return NULL;
 
   clay_data_p newd = clay_data_malloc(d->type);
+  char *str_copy;
 
   switch (d->type) {
     case UNDEF_T:
@@ -145,7 +146,8 @@ clay_data_p clay_data_clone(clay_data_p d) {
       break;
 
     case STRING_T:
-      newd->data.obj = strdup((char*) d->data.obj);
+      CLAY_strdup(str_copy, (char *) d->data.obj);
+      newd->data.obj = str_copy;
       break;
   }
 

@@ -46,6 +46,9 @@
 # define CLAY_TRUE			1
 # define CLAY_FALSE			0
 
+#include <stdio.h>
+#include <string.h>
+
 /*--------------------------------------------------------------------------+
  |                              UTILITY MACROS                              |
  +--------------------------------------------------------------------------*/
@@ -92,9 +95,9 @@
 
 # define CLAY_strdup(destination, source)                                  \
          do {                                                              \
-           if (source != NULL) {                                           \
-             if (((destination) = strdup(source)) == NULL)                 \
-               CLAY_error("memory overflow");                              \
+           if ((source) != NULL) {                                         \
+             CLAY_malloc((destination), char *, strlen(source) + 1);       \
+             strcpy((destination), (source));                              \
            }                                                               \
            else {                                                          \
              destination = NULL;                                           \
